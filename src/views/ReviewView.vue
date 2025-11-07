@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const monthList = [
     { name: 'January', days:31},
@@ -21,54 +21,132 @@ const year = today.getFullYear()
 const month = today.getMonth()
 const date = today.getDate()
 const nowMonth = ref(month)
+const nowYear = ref(year)
 
 function setMonth(value) {
-    nowMonth.value = nowMonth.value + Number(value);
+    if(nowMonth.value == 11 && value == 1){
+        nowYear.value += 1
+        nowMonth.value = 0
+    }
+    else if(nowMonth.value == 0 && value == -1){
+        nowYear.value -= 1
+        nowMonth.value = 11
+    }else{
+         nowMonth.value = nowMonth.value + Number(value);
+    }
 }
+
+const getDateArray = computed(() => {
+    const firstDate =  new Date(nowYear.value + '-' + (nowMonth.value+1)+'-01')
+    const firstDay = firstDate.getDay()
+    let arr = []
+    for(let i=0 ; i<firstDay; i++){
+        arr.push(null)
+    }
+    for(let i=0; i<monthList[nowMonth.value].days; i++){
+        arr.push((i+1).toString())
+    }
+    return arr
+})
 
 function getWeekFontColor(num) {
     switch (num) {
         case 0:
-            return 'red';
+            return 'color: red';
         case 6:
-            return 'blue';
+            return 'color: blue';
         default:
-            return 'black';
+            return 'color: black';
     }
 }
 </script>
 <template>
-    <div>
-        <div>
-            <h3>{{ nowMonth+1 }}</h3>
-            <div class="d-flex flex-column">
-                <span>{{ year }}</span>
-                <span>
-                    {{ monthList[nowMonth].name }} {{ date }}
-                </span>
+    <div class="calendarWrapper">
+        <div class="d-flex calendarController">
+            <div class="d-flex">
+                <h3>{{ nowMonth+1 }}</h3>
+                <div class="d-flex flex-column">
+                    <span>{{ nowYear }}</span>
+                    <span>
+                        {{ monthList[nowMonth].name }}
+                    </span>
+                </div>
             </div>
-            <button @click="setMonth(-1)" class="btnCalendar">◀</button>
-            <button @click="setMonth(+1)" class="btnCalendar">▶</button>
+            <div class="d-flex calendarButton">
+                <button @click="setMonth(-1)" class="btnCalendar">◀</button>
+                <button @click="setMonth(+1)" class="btnCalendar">▶</button>
+            </div>
         </div>
 
-        <table>
+        <table class="calendarTable">
             <thead>
                 <tr>
                     <td v-for="daynum in 7" :key="daynum">
-                        <span :style="getWeekFontColor(daynum)">
-                            {{ weekDay[daynum].name }}
+                        <span :style="getWeekFontColor(daynum-1)">
+                            {{ weekDay[(daynum-1)].name }}
                         </span>
                     </td>
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr v-for="weeknum in Math.ceil(getDateArray.length /7)" :key="weeknum">
                     <td v-for="daynum in 7" :key="daynum">
-                        
-                        {{ daynum }}
+                        <div style="height: 100%;">
+                            <span style="font-size: 14px;">
+                                {{ getDateArray[(weeknum-1)*7 + (daynum-1)] == null? '': getDateArray[(weeknum-1)*7 + (daynum-1)] }}
+                            </span>
+                        </div>
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 </template>
+
+<style>
+.calendarWrapper{
+    width: 400px;
+}
+.calendarController{
+    justify-content: space-between;
+    align-items: end;
+}
+
+.calendarButton{
+    gap:8px;
+}
+.calendarButton .btnCalendar{
+    padding: 2px 12px;
+    outline: none;
+    box-shadow: none;
+    border: 0;
+    border-radius: 4px;
+    background:var(--bg-color);
+    color: gold;
+}
+
+.calendarTable{
+    width: 100%;
+    border-collapse: collapse;
+}
+.calendarTable thead td{
+    background-color: rgb(247, 212, 125);
+    padding: 4px 2px;
+    text-align: center;
+    font-size: 14px;
+
+}
+.calendarTable thead td span{
+    font-weight: 600;
+
+}
+.calendarTable tbody tr,td{
+    border:1px solid rgb(247, 212, 125);
+
+}
+.calendarTable tbody td{
+    width: 14%;
+    padding: 1px 2px;
+    height: 60px;
+}
+</style>
