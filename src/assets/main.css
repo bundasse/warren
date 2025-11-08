@@ -130,6 +130,7 @@ header{
 
 main{
     height: 450px;
+    overflow-y: scroll;
 }
 footer{
     border-top:  1px solid black;

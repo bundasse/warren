@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
+import ReviewComponent from '@/components/ReviewComponent.vue';
 
 const monthList = [
     { name: 'January', days:31},
@@ -59,47 +60,56 @@ function getWeekFontColor(num) {
             return 'color: black';
     }
 }
+
+function calendarDate(weeknum, daynum) {
+    return getDateArray.value[(weeknum-1)*7 + (daynum-1)] == null? '': getDateArray.value[(weeknum-1)*7 + (daynum-1)]
+}
 </script>
 <template>
-    <div class="calendarWrapper">
-        <div class="d-flex calendarController">
-            <div class="d-flex">
-                <h3>{{ nowMonth+1 }}</h3>
-                <div class="d-flex flex-column">
-                    <span>{{ nowYear }}</span>
-                    <span>
-                        {{ monthList[nowMonth].name }}
-                    </span>
-                </div>
-            </div>
-            <div class="d-flex calendarButton">
-                <button @click="setMonth(-1)" class="btnCalendar">◀</button>
-                <button @click="setMonth(+1)" class="btnCalendar">▶</button>
-            </div>
-        </div>
-
-        <table class="calendarTable">
-            <thead>
-                <tr>
-                    <td v-for="daynum in 7" :key="daynum">
-                        <span :style="getWeekFontColor(daynum-1)">
-                            {{ weekDay[(daynum-1)].name }}
-                        </span>
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="weeknum in Math.ceil(getDateArray.length /7)" :key="weeknum">
-                    <td v-for="daynum in 7" :key="daynum">
-                        <div style="height: 100%;">
-                            <span style="font-size: 14px;">
-                                {{ getDateArray[(weeknum-1)*7 + (daynum-1)] == null? '': getDateArray[(weeknum-1)*7 + (daynum-1)] }}
+    <div>
+        <div class="d-flex">
+            <div class="calendarWrapper">
+                <div class="d-flex calendarController">
+                    <div class="d-flex">
+                        <h3>{{ nowMonth+1 }}</h3>
+                        <div class="d-flex flex-column">
+                            <span>{{ nowYear }}</span>
+                            <span>
+                                {{ monthList[nowMonth].name }}
                             </span>
                         </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+                    </div>
+                    <div class="d-flex calendarButton">
+                        <button @click="setMonth(-1)" class="btnCalendar">◀</button>
+                        <button @click="setMonth(+1)" class="btnCalendar">▶</button>
+                    </div>
+                </div>
+        
+                <table class="calendarTable">
+                    <thead>
+                        <tr>
+                            <td v-for="daynum in 7" :key="daynum">
+                                <span :style="getWeekFontColor(daynum-1)">
+                                    {{ weekDay[(daynum-1)].name }}
+                                </span>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="weeknum in Math.ceil(getDateArray.length /7)" :key="weeknum">
+                            <td v-for="daynum in 7" :key="daynum">
+                                <div style="height: 100%;" :style="((calendarDate(weeknum,daynum) == date) && (nowMonth == month) && (nowYear == year)) && 'background: cornsilk;'">
+                                    <span style="font-size: 14px;">
+                                        {{ calendarDate(weeknum,daynum) }}
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <ReviewComponent/>
+        </div>
     </div>
 </template>
 
