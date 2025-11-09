@@ -17,14 +17,20 @@ function setStar(num) {
 }
 </script>
 <template>
-    <div class="reviewInfoWrapper">
-        <template v-if="reviewType == '0'"></template>
-        <img src="https://placehold.co/200x280/orange/white" alt="" width="200" height="280">
-        <div class="reviewInfo">
-            <h4>Title</h4>
-            <ul class="reviewStar">
-                <li v-for="num in 5" :key="num"><div class="star" :style="starValueArr[num-1] == true ? 'color: goldenrod;':'color: lightgray;'" @click="setStar(num)">★</div></li>
-            </ul>
+    <div>
+        <div class="reviewInfoWrapper">
+            <template v-if="reviewType == '0'"></template>
+            <img src="https://placehold.co/200x280/orange/white" alt="" width="200" height="280">
+            <div class="reviewInfo">
+                <h4>Title</h4>
+                <ul class="reviewStar">
+                    <li v-for="num in 5" :key="num"><div class="star" :style="starValueArr[num-1] == true ? 'color: goldenrod;':'color: lightgray;'" @click="setStar(num)">★</div></li>
+                </ul>
+            </div>
+        </div>
+        <div class="reviewContentsWrapper">
+            <h5 class="reviewContentsTitle"></h5>
+            <p class="reviewContentsText"></p>
         </div>
     </div>
 </template>
