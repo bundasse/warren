@@ -1,6 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 const starValueArr = ref([false,false,false,false,false])
+
+const txtTitleValue = ref('')
+const txtHeadValue = ref('')
+const txtContentsValue = ref('')
+
 function setStar(num) {
     let idx = num -1
     if(starValueArr.value[idx] == false){
@@ -22,7 +27,7 @@ function setStar(num) {
         </div>
         <div>
             <label for="txtTitle"></label>
-            <input type="text" name="" id="txtTitle">
+            <input type="text" name="" id="txtTitle" v-model="txtTitleValue" />
         </div>
         <div>
             <ul class="reviewStar">
@@ -30,8 +35,8 @@ function setStar(num) {
             </ul>
         </div>
         <div>
-            <input type="text" name="" id="txtHead">
-            <textarea name="" id="" rows="5"></textarea>
+            <input type="text" name="" id="txtHead" v-model="txtHeadValue">
+            <textarea name="" id="txtContents" rows="5" v-model="txtContentsValue"></textarea>
         </div>
     </div>
 </template>
