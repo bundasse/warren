@@ -67,7 +67,7 @@ function calendarDate(weeknum, daynum) {
 </script>
 <template>
     <div>
-        <div class="d-flex">
+        <div class="d-flex reviewViewWrapper">
             <div class="calendarWrapper">
                 <div class="d-flex calendarController">
                     <div class="d-flex">
@@ -114,6 +114,10 @@ function calendarDate(weeknum, daynum) {
 </template>
 
 <style>
+
+.reviewViewWrapper{
+    gap: 20px;
+}
 .calendarWrapper{
     width: 400px;
 }
@@ -157,6 +161,6 @@ function calendarDate(weeknum, daynum) {
 .calendarTable tbody td{
     width: 14%;
     padding: 1px 2px;
-    height: 60px;
+    height: 54px;
 }
 </style>
