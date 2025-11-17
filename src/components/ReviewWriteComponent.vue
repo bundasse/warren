@@ -23,7 +23,7 @@ function setStar(num) {
 <template>
     <div>
         <div>
-            <label for="fileUpload">메인 이미지</label><input type="file" name="" id="fileUpload">
+            <label for="fileUpload">이미지</label><input type="file" name="" id="fileUpload">
         </div>
         <div>
             <label for="txtTitle"></label>

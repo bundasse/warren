@@ -20,7 +20,7 @@ const txtComments = ref()
                 </div>
             </div>
             <div>코멘트</div>
-            <textarea name="" id="txtPicComments" v-model="txtComments"></textarea>
+            <textarea id="txtPicComments" v-model="txtComments"></textarea>
             <div class="d-flex buttons">
                 <button>저장</button>
                 <button>취소</button>
