@@ -7,7 +7,7 @@ const txtComments = ref()
 
 <template>
     <div>
-        <img src="" alt="" style="max-width: 500px;">
+        <img src="https://placehold.co/900x280/orange/white" alt="" style="max-width: 500px;">
         <div>
             <div>
                 <div>
