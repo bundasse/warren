@@ -10,7 +10,7 @@
                     <button><i class="bx bx-edit"></i></button>
                     <button><i class="bx bx-delete"></i></button>
                 </div>
-                <div>코멘트</div>
+                <div>코멘트 </div>
             </div>
         </div>
     </div>
