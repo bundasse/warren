@@ -11,7 +11,7 @@
       Knit+Crochet
     </div>
     <div class="profileContents">
-      Pic
+      OC
     </div>
   </div>
 </template>
