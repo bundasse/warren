@@ -15,7 +15,7 @@
                             <button><i class="bx bx-delete"></i></button>
                         </div>
                     </div>
-                    <div>코멘트 </div>
+                    <div>코멘트</div>
                     <p></p>
                 </div>
             </div>
