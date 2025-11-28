@@ -144,3 +144,9 @@ footer{
     justify-content: end;
     gap: 8px;
 }
+
+.bannerList{
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 12px;
+}
