@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue';
-const txtName= ref()
-const txtPassword = ref()
-const txtComments = ref()
+const txtName= ref('')
+const txtPassword = ref('')
+const txtComments = ref('')
 </script>
 
 <template>
