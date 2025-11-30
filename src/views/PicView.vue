@@ -1,4 +1,13 @@
-<script setup></script>
+<script setup>
+
+function editCommand() {
+    console.log('edit')
+}
+function deleteCommand() {
+    console.log('delete')
+    
+}
+</script>
 <template>
     <div>
         <template>
@@ -11,8 +20,8 @@
                             <div class="writeTime">투고일시</div>
                         </div>
                         <div class="buttons">
-                            <button><i class="bx bx-edit"></i></button>
-                            <button><i class="bx bx-delete"></i></button>
+                            <button @click="editCommand"><i class="bx bx-edit"></i></button>
+                            <button @click="deleteCommand"><i class="bx bx-delete"></i></button>
                         </div>
                     </div>
                     <div>코멘트</div>
