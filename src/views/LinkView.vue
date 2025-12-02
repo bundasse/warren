@@ -2,6 +2,8 @@
 import { ref } from 'vue';
 const banners = ref([{link:'',img:''}])
 const isAdmin = ref(true)
+const txtLinkValue = ref('')
+const txtImgValue =ref('')
 
 function copyCode(type) {
     let val = ''
@@ -21,9 +23,9 @@ function copyCode(type) {
     <div>
         <div v-if="isAdmin">
             <label for="txtLink">링크주소</label>
-            <input type="text" id="txtLink">
+            <input type="text" id="txtLink" v-model="txtLinkValue">
             <label for="txtImg">이미지주소</label>
-            <input type="text" id="txtImg">
+            <input type="text" id="txtImg" v-model="txtImgValue">
             <button><i class="bx bx-plus"></i>추가</button>
         </div>
         <div class="myBanner">
