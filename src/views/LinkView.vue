@@ -23,6 +23,9 @@ function addBanner() {
         img : txtImgValue.value,
         link: txtLinkValue.value
     }
+
+    txtImgValue.value = '';
+    txtLinkValue.value = '';
 }
 </script>
 <template>
