@@ -3,6 +3,17 @@ import { ref } from 'vue';
 const txtName= ref('')
 const txtPassword = ref('')
 const txtComments = ref('')
+
+function saveCommand() {
+    const data = {
+        name: txtName.value,
+        password: txtPassword.value,
+        comment: txtComments.value
+    }
+}
+function cancelCommand() {
+    console.log('cancel')
+}
 </script>
 
 <template>
@@ -22,8 +33,8 @@ const txtComments = ref('')
             <div>코멘트</div>
             <textarea id="txtPicComments" v-model="txtComments"></textarea>
             <div class="d-flex buttons">
-                <button>저장</button>
-                <button>취소</button>
+                <button @click="saveCommand">저장</button>
+                <button @click="cancelCommand">취소</button>
             </div>
         </div>
     </div>
