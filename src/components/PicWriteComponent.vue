@@ -12,7 +12,7 @@ function saveCommand() {
     }
 }
 function cancelCommand() {
-    console.log('cancel')
+    console.log('cancel');
 }
 </script>
 
