@@ -10,6 +10,7 @@ function saveCommand() {
         password: txtPassword.value,
         comment: txtComments.value
     }
+    console.log(data)
 }
 function cancelCommand() {
     console.log('cancel');
