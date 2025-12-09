@@ -38,6 +38,10 @@ function setStar(num) {
             <input type="text" name="" id="txtHead" v-model="txtHeadValue">
             <textarea name="" id="txtContents" rows="5" v-model="txtContentsValue"></textarea>
         </div>
+        <div>
+            <button>저장</button>
+            <button>취소</button>
+        </div>
     </div>
 </template>
 
