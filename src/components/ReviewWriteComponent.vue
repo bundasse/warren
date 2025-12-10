@@ -18,6 +18,17 @@ function setStar(num) {
         }
     }
 }
+
+function saveCommand() {
+    console.log('save')
+}
+
+function clearCommand() {
+    txtTitleValue.value = ''
+    txtHeadValue.value = ''
+    txtContentsValue.value = ''
+    starValueArr.value =[false,false,false,false,false]
+}
 </script>
 
 <template>
@@ -39,8 +50,8 @@ function setStar(num) {
             <textarea name="" id="txtContents" rows="5" v-model="txtContentsValue"></textarea>
         </div>
         <div>
-            <button>저장</button>
-            <button>취소</button>
+            <button @click="saveCommand">저장</button>
+            <button @click="clearCommand">Clear</button>
         </div>
     </div>
 </template>
