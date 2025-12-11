@@ -8,6 +8,7 @@ const comment = ref([{idx:1, text:'ssss', writer:'토끼파행동대장'}])
   <div class="row h-100">
     <div class="col-3">
       로고이미지 화면
+      WARREN
     </div>
     <div class="col-3"></div>
     <div class="col-3">
