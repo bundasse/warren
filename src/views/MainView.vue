@@ -2,6 +2,9 @@
 import { ref } from 'vue';
 
 const comment = ref([{idx:1, text:'ssss', writer:'토끼파행동대장'}])
+const txtName = ref('')
+const txtPassword = ref('')
+const txtContents = ref('')
 </script>
 
 <template>
@@ -21,6 +24,14 @@ const comment = ref([{idx:1, text:'ssss', writer:'토끼파행동대장'}])
           </div>
         </li>
       </ul>
+      <div>
+        <label for="txtName">이름</label>
+        <input type="text" id="txtName" v-model="txtName">
+        <label for="txtName">비밀번호</label>
+        <input type="text" id="txtPassword" v-model="txtPassword">
+        <label for="txtContents"></label>
+        <textarea name="" id="txtContents" v-model="txtContents"></textarea>
+      </div>
     </div>
   </div>
 </template>
