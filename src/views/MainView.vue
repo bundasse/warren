@@ -16,6 +16,7 @@ const txtContents = ref('')
     <div class="col-3"></div>
     <div class="col-3">
       방명록
+      
       <ul>
         <li v-for="(e,i) in comment" :key="i">
           <p>{{ e.writer }}</p>
