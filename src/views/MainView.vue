@@ -10,7 +10,6 @@ const txtContents = ref('')
 <template>
   <div class="row h-100">
     <div class="col-3">
-      로고이미지 화면
       WARREN
     </div>
     <div class="col-3"></div>
