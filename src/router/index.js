@@ -19,11 +19,11 @@ const router = createRouter({
       name: 'pic',
       component: () => import('../views/PicView.vue'),
     },
-    {
-      path: '/yarn',
-      name: 'yarn',
-      component: () => import('../views/YarnView.vue'),
-    },
+    // {
+    //   path: '/yarn',
+    //   name: 'yarn',
+    //   component: () => import('../views/YarnView.vue'),
+    // },
     {
       path: '/review',
       name: 'review',
