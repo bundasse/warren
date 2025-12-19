@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 
-const comment = ref([{idx:1, text:'ssss', writer:'토끼파행동대장'}])
+const comment = ref([{idx:1, text:'ipsum', writer:'토끼파행동대장'}])
 const txtName = ref('')
 const txtPassword = ref('')
 const txtContents = ref('')
