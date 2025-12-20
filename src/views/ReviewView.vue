@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import ReviewComponent from '@/components/ReviewComponent.vue';
+import ReviewWriteComponent from '@/components/ReviewWriteComponent.vue';
 
 const monthList = [
     { name: 'January', days:31},
@@ -23,6 +24,7 @@ const month = today.getMonth()
 const date = today.getDate()
 const nowMonth = ref(month)
 const nowYear = ref(year)
+const selectedDate = ref(year+'-'+month+'-'+date)
 
 function setMonth(value) {
     if(nowMonth.value == 11 && value == 1){
@@ -64,6 +66,10 @@ function getWeekFontColor(num) {
 function calendarDate(weeknum, daynum) {
     return getDateArray.value[(weeknum-1)*7 + (daynum-1)] == null? '': getDateArray.value[(weeknum-1)*7 + (daynum-1)]
 }
+
+function setDate(y,m,d) {
+    selectedDate.value = y+'-'+m+'-'+d;
+}
 </script>
 <template>
     <div>
@@ -98,7 +104,7 @@ function calendarDate(weeknum, daynum) {
                     <tbody>
                         <tr v-for="weeknum in Math.ceil(getDateArray.length /7)" :key="weeknum">
                             <td v-for="daynum in 7" :key="daynum">
-                                <div style="height: 100%;" :style="((calendarDate(weeknum,daynum) == date) && (nowMonth == month) && (nowYear == year)) && 'background: cornsilk;'">
+                                <div style="height: 100%;" :style="((calendarDate(weeknum,daynum) == date) && (nowMonth == month) && (nowYear == year)) && 'background: cornsilk;'" @click="setDate(nowYear,nowMonth,calendarDate(weeknum,daynum))">
                                     <span style="font-size: 14px;">
                                         {{ calendarDate(weeknum,daynum) }}
                                     </span>
@@ -108,7 +114,8 @@ function calendarDate(weeknum, daynum) {
                     </tbody>
                 </table>
             </div>
-            <ReviewComponent/>
+            <ReviewWriteComponent v-if="selectedDate == (year+'-'+month+'-'+date)"/>
+            <ReviewComponent v-else />
         </div>
     </div>
 </template>
