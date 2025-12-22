@@ -73,7 +73,7 @@ function setDate(y,m,d) {
 }
 
 function getReviewData(datestr) {
-    console.log(datestr)
+    console.log(datestr);
 }
 </script>
 <template>
