@@ -69,7 +69,7 @@ function calendarDate(weeknum, daynum) {
 
 function setDate(y,m,d) {
     selectedDate.value = y+'-'+m+'-'+d;
-    getReviewData(y+'-'+m+'-'+d)
+    getReviewData(y+'-'+m+'-'+d);
 }
 
 function getReviewData(datestr) {
