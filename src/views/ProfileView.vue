@@ -8,7 +8,7 @@
       TRPG
     </div>
     <div class="profileContents">
-      Knit+Crochet
+      Knit
     </div>
     <div class="profileContents">
       OC
