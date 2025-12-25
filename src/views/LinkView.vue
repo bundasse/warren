@@ -31,9 +31,9 @@ function addBanner() {
 <template>
     <div>
         <div v-if="isAdmin">
-            <label for="txtLink">링크주소</label>
+            <label for="txtLink">링크</label>
             <input type="text" id="txtLink" v-model="txtLinkValue">
-            <label for="txtImg">이미지주소</label>
+            <label for="txtImg">이미지</label>
             <input type="text" id="txtImg" v-model="txtImgValue">
             <button @click="addBanner"><i class="bx bx-plus"></i>추가</button>
         </div>
