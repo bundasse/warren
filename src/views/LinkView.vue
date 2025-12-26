@@ -38,7 +38,7 @@ function addBanner() {
             <button @click="addBanner"><i class="bx bx-plus"></i>추가</button>
         </div>
         <div class="myBanner">
-            <img src="" alt="">
+            <img src="내배너" alt="">
             <div>
                 <span>image Link: </span>
                 <button @click="copyCode('link')"><i class="bx bx-clip"></i></button>
