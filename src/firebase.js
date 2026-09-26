@@ -1,22 +1,21 @@
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore, collection, getDocs, doc, addDoc, updateDoc, query, where } from "firebase/firestore";
+import { initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
+import { getFirestore } from 'firebase/firestore'
+import { firebaseConfig, isFirebaseConfigured } from '@/config/firebaseEnv'
 
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.FIREBASE_APP_ID,
-};
+/**
+ * Firebase 초기화.
+ *
+ * 설정 값은 `.env`의 `VITE_FIREBASE_*`에서 읽고(`@/config/firebaseEnv`),
+ * 이 모듈에서 실제 SDK 앱을 만든다.
+ *
+ * 이 파일은 `@/api`가 실제 Firestore를 쓸 때만 동적 import되므로,
+ * mock 개발 모드에서는 번들에 포함되지 않는다.
+ */
+export { firebaseConfig, isFirebaseConfigured }
 
-// npm install dotenv - env가 정상 동작하지 않을 때 설치 필요함
+const app = initializeApp(firebaseConfig)
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-// Initialize Firestore 
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-export { auth, db, collection, getDocs, doc, addDoc, updateDoc, query, where };
+export const db = getFirestore(app)
+export const auth = getAuth(app)
+export default app
