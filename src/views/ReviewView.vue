@@ -1,178 +1,401 @@
 <script setup>
-import { ref, computed } from 'vue';
-import ReviewComponent from '@/components/ReviewComponent.vue';
-import ReviewWriteComponent from '@/components/ReviewWriteComponent.vue';
+import { computed, onMounted, ref, watch } from 'vue'
+import { reviewApi } from '@/api'
+import {
+  MONTH_NAMES,
+  WEEK_DAYS,
+  addMonths,
+  buildCalendarDays,
+  chunkByWeek,
+  pad2,
+  todayKey,
+} from '@/utils/date'
+import ReviewComponent from '@/components/ReviewComponent.vue'
+import ReviewWriteComponent from '@/components/ReviewWriteComponent.vue'
+import PasswordModal from '@/components/PasswordModal.vue'
 
-const monthList = [
-    { name: 'January', days:31},
-    { name: 'Febrary', days:28},
-    { name: 'March', days:31},
-    { name: 'April', days:30},
-    { name: 'May', days:31},
-    { name: 'June', days:30},
-    { name: 'July', days:31},
-    { name: 'August', days:31},
-    { name: 'Septemper', days:30},
-    { name: 'October', days:31},
-    { name: 'November', days:30},
-    { name: 'December', days:31},
-];
-const weekDay = [{name:'SUN'},{name:'MON'},{name:'TUE'},{name:'WED'},{name:'THU'},{name:'FRI'},{name:'SAT'}]
-const today = new Date();
-const year = today.getFullYear()
-const month = today.getMonth()
-const date = today.getDate()
-const nowMonth = ref(month)
-const nowYear = ref(year)
-const selectedDate = ref(year+'-'+month+'-'+date)
+const today = todayKey()
+const [todayYear, todayMonth] = today.split('-').map(Number)
 
-function setMonth(value) {
-    if(nowMonth.value == 11 && value == 1){
-        nowYear.value += 1
-        nowMonth.value = 0
-    }
-    else if(nowMonth.value == 0 && value == -1){
-        nowYear.value -= 1
-        nowMonth.value = 11
-    }else{
-         nowMonth.value = nowMonth.value + Number(value);
-    }
-}
+const nowYear = ref(todayYear)
+const nowMonth = ref(todayMonth) // 1-based
+const selectedDate = ref(today)
 
-const getDateArray = computed(() => {
-    const firstDate =  new Date(nowYear.value + '-' + (nowMonth.value+1)+'-01')
-    const firstDay = firstDate.getDay()
-    let arr = []
-    for(let i=0 ; i<firstDay; i++){
-        arr.push(null)
-    }
-    for(let i=0; i<monthList[nowMonth.value].days; i++){
-        arr.push((i+1).toString())
-    }
-    return arr
+const reviews = ref([])
+const isLoading = ref(false)
+const errorMessage = ref('')
+const isWriting = ref(false)
+
+const monthLabel = computed(() => MONTH_NAMES[nowMonth.value - 1])
+const weeks = computed(() => chunkByWeek(buildCalendarDays(nowYear.value, nowMonth.value)))
+
+/** dateKey -> review 매핑 (달력에 리뷰 있는 날을 표시하기 위함) */
+const reviewByDate = computed(() => {
+  const map = {}
+  reviews.value.forEach((review) => {
+    map[review.dateKey] = review
+  })
+  return map
 })
 
-function getWeekFontColor(num) {
-    switch (num) {
-        case 0:
-            return 'color: red';
-        case 6:
-            return 'color: blue';
-        default:
-            return 'color: black';
-    }
+const selectedReview = computed(() => reviewByDate.value[selectedDate.value] ?? null)
+
+function dateKeyOf(day) {
+  return `${nowYear.value}-${pad2(nowMonth.value)}-${pad2(day)}`
 }
 
-function calendarDate(weeknum, daynum) {
-    return getDateArray.value[(weeknum-1)*7 + (daynum-1)] == null? '': getDateArray.value[(weeknum-1)*7 + (daynum-1)]
+function changeMonth(delta) {
+  const moved = addMonths(nowYear.value, nowMonth.value, delta)
+  nowYear.value = moved.year
+  nowMonth.value = moved.month
 }
 
-function setDate(y,m,d) {
-    selectedDate.value = y+'-'+m+'-'+d;
-    getReviewData(y+'-'+m+'-'+d);
+function isToday(day) {
+  return dateKeyOf(day) === today
 }
 
-function getReviewData(datestr) {
-    console.log(datestr);
+function selectDate(day) {
+  if (!day) return
+  selectedDate.value = dateKeyOf(day)
+  isWriting.value = false
 }
+
+async function loadReviews() {
+  isLoading.value = true
+  errorMessage.value = ''
+  try {
+    reviews.value = await reviewApi.list()
+  } catch (error) {
+    console.error('[review] 목록 조회 실패', error)
+    errorMessage.value = '리뷰를 불러오지 못했습니다.'
+  } finally {
+    isLoading.value = false
+  }
+}
+
+function startWriting() {
+  isWriting.value = true
+}
+
+function cancelWriting() {
+  isWriting.value = false
+}
+
+async function onSaved() {
+  isWriting.value = false
+  await loadReviews()
+}
+
+/* 삭제: 비밀번호 대신 확인 모달 없이 바로 삭제하되, 실수 방지를 위해 확인창을 띄운다. */
+const modalOpen = ref(false)
+const modalError = ref('')
+const ADMIN_PASSWORD = 'dasse'
+
+function openDeleteModal() {
+  modalError.value = ''
+  modalOpen.value = true
+}
+
+async function confirmDelete(password) {
+  const review = selectedReview.value
+  if (!review) return
+  if (password !== ADMIN_PASSWORD) {
+    modalError.value = '비밀번호가 일치하지 않습니다.'
+    return
+  }
+  modalOpen.value = false
+  try {
+    await reviewApi.remove(review.id)
+    await loadReviews()
+  } catch (error) {
+    console.error('[review] 삭제 실패', error)
+    errorMessage.value = '삭제에 실패했습니다.'
+  }
+}
+
+// 선택 날짜가 바뀌면 작성 모드를 해제한다.
+watch(selectedDate, () => {
+  isWriting.value = false
+})
+
+onMounted(loadReviews)
 </script>
+
 <template>
-    <div>
-        <div class="d-flex reviewViewWrapper">
-            <div class="calendarWrapper">
-                <div class="d-flex calendarController">
-                    <div class="d-flex">
-                        <h3>{{ nowMonth+1 }}</h3>
-                        <div class="d-flex flex-column">
-                            <span>{{ nowYear }}</span>
-                            <span>
-                                {{ monthList[nowMonth].name }}
-                            </span>
-                        </div>
-                    </div>
-                    <div class="d-flex calendarButton">
-                        <button @click="setMonth(-1)" class="btnCalendar">◀</button>
-                        <button @click="setMonth(+1)" class="btnCalendar">▶</button>
-                    </div>
-                </div>
-        
-                <table class="calendarTable">
-                    <thead>
-                        <tr>
-                            <td v-for="daynum in 7" :key="daynum">
-                                <span :style="getWeekFontColor(daynum-1)">
-                                    {{ weekDay[(daynum-1)].name }}
-                                </span>
-                            </td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="weeknum in Math.ceil(getDateArray.length /7)" :key="weeknum">
-                            <td v-for="daynum in 7" :key="daynum">
-                                <div style="height: 100%;" :style="((calendarDate(weeknum,daynum) == date) && (nowMonth == month) && (nowYear == year)) && 'background: cornsilk;'" @click="setDate(nowYear,nowMonth,calendarDate(weeknum,daynum))">
-                                    <span style="font-size: 14px;">
-                                        {{ calendarDate(weeknum,daynum) }}
-                                    </span>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+  <div class="reviewView">
+    <div class="reviewViewWrapper">
+      <div class="calendarWrapper">
+        <div class="calendarController">
+          <div class="calendarTitle">
+            <h3>{{ nowMonth }}</h3>
+            <div class="calendarSubTitle">
+              <span>{{ nowYear }}</span>
+              <span>{{ monthLabel }}</span>
             </div>
-            <ReviewWriteComponent v-if="selectedDate == (year+'-'+month+'-'+date)"/>
-            <ReviewComponent v-else />
+          </div>
+          <div class="calendarButton">
+            <button type="button" class="btnCalendar" @click="changeMonth(-1)">◀</button>
+            <button type="button" class="btnCalendar" @click="changeMonth(1)">▶</button>
+          </div>
         </div>
+
+        <table class="calendarTable">
+          <thead>
+            <tr>
+              <td v-for="(weekDay, index) in WEEK_DAYS" :key="weekDay">
+                <span :class="`weekDay-${index}`">{{ weekDay }}</span>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(week, weekIndex) in weeks" :key="weekIndex">
+              <td v-for="(day, dayIndex) in week" :key="dayIndex">
+                <button
+                  v-if="day"
+                  type="button"
+                  class="dayCell"
+                  :class="{
+                    today: isToday(day),
+                    selected: dateKeyOf(day) === selectedDate,
+                    hasReview: Boolean(reviewByDate[dateKeyOf(day)]),
+                  }"
+                  @click="selectDate(day)"
+                >
+                  <span class="dayNumber">{{ day }}</span>
+                  <i v-if="reviewByDate[dateKeyOf(day)]" class="bx bxs-star dayStar"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="detail">
+        <p v-if="isLoading" class="detailMessage">불러오는 중…</p>
+        <p v-else-if="errorMessage" class="detailError">{{ errorMessage }}</p>
+
+        <ReviewWriteComponent
+          v-else-if="isWriting"
+          :date-key="selectedDate"
+          :date-label="selectedDate"
+          :editing="selectedReview"
+          @saved="onSaved"
+          @cancel="cancelWriting"
+        />
+
+        <template v-else>
+          <div class="detailHeader">
+            <p class="detailDate">{{ selectedDate }}</p>
+            <div class="detailButtons">
+              <button v-if="selectedReview" type="button" class="btnGhost" @click="openDeleteModal">
+                <i class="bx bx-trash"></i>
+                삭제
+              </button>
+              <button type="button" class="btnPrimary" @click="startWriting">
+                <i class="bx" :class="selectedReview ? 'bx-edit' : 'bx-plus'"></i>
+                {{ selectedReview ? '수정' : '리뷰 쓰기' }}
+              </button>
+            </div>
+          </div>
+          <ReviewComponent :review="selectedReview" :date-label="selectedDate" />
+        </template>
+      </div>
     </div>
+
+    <PasswordModal
+      v-model:open="modalOpen"
+      title="리뷰 삭제"
+      message="리뷰를 삭제하려면 비밀번호를 입력하세요."
+      confirm-text="삭제"
+      :error="modalError"
+      @confirm="confirmDelete"
+    />
+  </div>
 </template>
 
-<style>
-
-.reviewViewWrapper{
-    gap: 20px;
-}
-.calendarWrapper{
-    width: 400px;
-}
-.calendarController{
-    justify-content: space-between;
-    align-items: end;
+<style scoped>
+.reviewView {
+  height: 100%;
+  min-height: 0;
 }
 
-.calendarButton{
-    gap:8px;
-}
-.calendarButton .btnCalendar{
-    padding: 2px 12px;
-    outline: none;
-    box-shadow: none;
-    border: 0;
-    border-radius: 4px;
-    background:var(--bg-color);
-    color: gold;
+.reviewViewWrapper {
+  display: flex;
+  gap: 20px;
+  height: 100%;
 }
 
-.calendarTable{
-    width: 100%;
-    border-collapse: collapse;
+.calendarWrapper {
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-.calendarTable thead td{
-    background-color: rgb(247, 212, 125);
-    padding: 4px 2px;
-    text-align: center;
-    font-size: 14px;
 
+.calendarController {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
-.calendarTable thead td span{
-    font-weight: 600;
 
+.calendarTitle {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
 }
-.calendarTable tbody tr,td{
-    border:1px solid rgb(247, 212, 125);
 
+.calendarTitle h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--bg-color);
 }
-.calendarTable tbody td{
-    width: 14%;
-    padding: 1px 2px;
-    height: 54px;
+
+.calendarSubTitle {
+  display: flex;
+  flex-direction: column;
+  font-size: 11px;
+  line-height: 1.3;
+  color: #777;
+}
+
+.calendarButton {
+  display: flex;
+  gap: 8px;
+}
+
+.btnCalendar {
+  padding: 2px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--bg-color);
+  color: gold;
+  cursor: pointer;
+}
+
+.calendarTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.calendarTable thead td {
+  background-color: rgb(247, 212, 125);
+  padding: 4px 2px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.calendarTable thead td .weekDay-0 {
+  color: red;
+}
+
+.calendarTable thead td .weekDay-6 {
+  color: blue;
+}
+
+.calendarTable tbody td {
+  width: 14%;
+  padding: 0;
+  height: 52px;
+  border: 1px solid rgb(247, 212, 125);
+}
+
+.dayCell {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1px;
+  color: inherit;
+}
+
+.dayCell:hover {
+  background: #fffbe8;
+}
+
+.dayCell.today {
+  background: cornsilk;
+}
+
+.dayCell.selected {
+  background: var(--bg-color);
+  color: gold;
+}
+
+.dayNumber {
+  font-size: 13px;
+}
+
+.dayStar {
+  font-size: 10px;
+  color: goldenrod;
+}
+
+.dayCell.selected .dayStar {
+  color: gold;
+}
+
+.detail {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detailHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgb(247, 212, 125);
+  padding-bottom: 6px;
+}
+
+.detailDate {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.detailButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.detailMessage,
+.detailError {
+  font-size: 12px;
+}
+
+.detailError {
+  color: crimson;
+}
+
+.btnGhost,
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border: 1px solid black;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btnGhost {
+  background: white;
+}
+
+.btnPrimary {
+  background: var(--bg-color);
+  border-color: var(--bg-color);
+  color: gold;
+  font-weight: 500;
 }
 </style>
