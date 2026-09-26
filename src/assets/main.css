@@ -1,152 +1,178 @@
-:root{
+:root {
   --font-color: black;
-    --bg-color: rgb(77, 126, 65);
+  --bg-color: rgb(77, 126, 65);
 }
 @font-face {
-    font-family: 'Escoredream';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-1Thin.woff') format('woff');
-    font-weight: 100;
-    font-display: swap;
+  font-family: 'Escoredream';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-1Thin.woff')
+    format('woff');
+  font-weight: 100;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Escoredream';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-2ExtraLight.woff') format('woff');
-    font-weight: 200;
-    font-display: swap;
+  font-family: 'Escoredream';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-2ExtraLight.woff')
+    format('woff');
+  font-weight: 200;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Escoredream';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
-    font-weight: 300;
-    font-display: swap;
+  font-family: 'Escoredream';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff')
+    format('woff');
+  font-weight: 300;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Escoredream';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff');
-    font-weight: normal;
-    font-display: swap;
+  font-family: 'Escoredream';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff')
+    format('woff');
+  font-weight: normal;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Escoredream';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff') format('woff');
-    font-weight: 500;
-    font-display: swap;
+  font-family: 'Escoredream';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff')
+    format('woff');
+  font-weight: 500;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Escoredream';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff') format('woff');
-    font-weight: 600;
-    font-display: swap;
+  font-family: 'Escoredream';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Bold.woff')
+    format('woff');
+  font-weight: 600;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Escoredream';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-7ExtraBold.woff') format('woff');
-    font-weight: 700;
-    font-display: swap;
+  font-family: 'Escoredream';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-7ExtraBold.woff')
+    format('woff');
+  font-weight: 700;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Escoredream';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-8Heavy.woff') format('woff');
-    font-weight: 800;
-    font-display: swap;
+  font-family: 'Escoredream';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-8Heavy.woff')
+    format('woff');
+  font-weight: 800;
+  font-display: swap;
 }
 
 @font-face {
-    font-family: 'Escoredream';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-9Black.woff') format('woff');
-    font-weight: 900;
-    font-display: swap;
+  font-family: 'Escoredream';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-9Black.woff')
+    format('woff');
+  font-weight: 900;
+  font-display: swap;
 }
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    list-style: none;
-    font-family: 'Escoredream';
-    font-weight: 300;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  font-family: 'Escoredream';
+  font-weight: 300;
 }
 
-a{
+a {
   text-decoration: none;
   color: var(--font-color);
 }
 
-.row{
-    display: flex;
-    justify-content: space-between;
+.row {
+  display: flex;
+  justify-content: space-between;
 }
-.h-100{
-    height: 100%;
+.h-100 {
+  height: 100%;
 }
-.col-2{
-    width: 48%;
+.col-2 {
+  width: 48%;
 }
-.col-3{
-    width: 32%;
+.col-3 {
+  width: 32%;
 }
 .d-flex {
-    display: flex;
+  display: flex;
 }
-.flex-column{
-    flex-direction: column;
+.flex-column {
+  flex-direction: column;
 }
-#wrapper{
-    height: 100%;
-    min-height: 100vh;
-    background-color: var(--bg-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-#mainContainer{
-    width: 960px;
-    height: 540px;
-    background-color: white;
-    border: 1px solid black;
+#wrapper {
+  min-height: 100vh;
+  background-color: var(--bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
 }
 
-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    margin: 0 12px;
-    border-bottom: 1px solid black;
-    padding: 4px;
-    height: 52px;
+#mainContainer {
+  width: min(960px, 100%);
+  height: 540px;
+  max-height: calc(100vh - 48px);
+  background-color: white;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
 }
 
-.navContainer{
-    display: flex;
-    gap: 20px;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin: 0 12px;
+  border-bottom: 1px solid black;
+  padding: 4px;
+  height: 52px;
 }
 
-main{
-    height: 450px;
-    padding: 20px 0;
-}
-footer{
-    border-top:  1px solid black;
-    margin: 0 12px;
-    padding: 4px;
-    height: 38px;
+.navContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.linkContainer{
-    display: flex;
-    justify-content: end;
-    gap: 8px;
+.navContainer a {
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
 }
 
-.bannerList{
-    display: grid;
-    grid-template-columns: repeat(3,1fr);
-    gap: 12px;
+.navContainer a.router-link-exact-active {
+  border-bottom-color: gold;
+  font-weight: 500;
+}
+
+main {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 20px 12px;
+}
+footer {
+  border-top: 1px solid black;
+  margin: 0 12px;
+  padding: 4px;
+  height: 38px;
+  flex-shrink: 0;
+}
+
+.linkContainer {
+  display: flex;
+  justify-content: end;
+  gap: 8px;
+}
+
+.bannerList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
 }

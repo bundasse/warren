@@ -1,65 +1,130 @@
 <script setup>
-import { ref } from 'vue';
-const reviewType = ref('0')
+/**
+ * 리뷰 읽기 전용 컴포넌트.
+ * 선택한 날짜에 리뷰가 있으면 보여주고, 없으면 안내 문구를 보여준다.
+ */
+import { ref, watch } from 'vue'
+import StarRating from '@/components/StarRating.vue'
 
-const starValueArr = ref([false,false,false,false,false])
-function setStar(num) {
-    let idx = num -1
-    if(starValueArr.value[idx] == false){
-        for(let i=0; i<=idx; i++){
-            starValueArr.value[i] = true
-        }
-    }else{
-        for(let i=4; i>idx; i--){
-            starValueArr.value[i] = false
-        }
-    }
-}
+const props = defineProps({
+  review: { type: Object, default: null },
+  dateLabel: { type: String, default: '' },
+})
+
+const imageError = ref(false)
+
+watch(
+  () => props.review,
+  () => {
+    imageError.value = false
+  },
+)
 </script>
+
 <template>
-    <div>
-        <div class="reviewInfoWrapper">
-            <template v-if="reviewType == '0'"></template>
-            <img src="https://placehold.co/200x280/orange/white" alt="" width="200" height="280">
-            <div class="reviewInfo">
-                <h4>Title</h4>
-                <ul class="reviewStar">
-                    <li v-for="num in 5" :key="num"><div class="star" :style="starValueArr[num-1] == true ? 'color: goldenrod;':'color: lightgray;'" @click="setStar(num)">★</div></li>
-                </ul>
-            </div>
+  <div class="reviewRead">
+    <template v-if="review">
+      <div class="reviewInfoWrapper">
+        <div class="reviewThumb">
+          <img
+            v-if="review.imageUrl && !imageError"
+            :src="review.imageUrl"
+            :alt="review.title"
+            @error="imageError = true"
+          />
+          <div v-else class="reviewThumbEmpty">
+            <i class="bx bx-image-alt"></i>
+          </div>
         </div>
-        <div class="reviewContentsWrapper">
-            <h5 class="reviewContentsTitle"></h5>
-            <p class="reviewContentsText"></p>
+        <div class="reviewInfo">
+          <p class="reviewDate">{{ dateLabel }}</p>
+          <h4 class="reviewTitle">{{ review.title || '제목 없음' }}</h4>
+          <StarRating :model-value="Number(review.rating) || 0" readonly size="24px" />
         </div>
-    </div>
+      </div>
+      <div class="reviewContentsWrapper">
+        <h5 class="reviewContentsTitle">{{ review.head }}</h5>
+        <p class="reviewContentsText">{{ review.contents }}</p>
+      </div>
+    </template>
+    <p v-else class="reviewEmpty">이 날짜에는 아직 리뷰가 없습니다.</p>
+  </div>
 </template>
 
-<style>
-.reviewInfoWrapper{
-    display: flex;
-    flex-wrap: wrap;
+<style scoped>
+.reviewRead {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-.reviewInfo{
-    margin-left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+.reviewInfoWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.reviewInfo h4{
-    font-size: 2rem;
-    font-weight: 600;
+.reviewThumb {
+  width: 160px;
+  flex-shrink: 0;
 }
 
-.reviewStar{
-    display: flex;
-    gap: 4px;
+.reviewThumb img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
 }
 
-.reviewStar .star{
-    font-size: 28px;
-    cursor: pointer;
+.reviewThumbEmpty {
+  height: 210px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px dashed rgb(247, 212, 125);
+  color: #bbb;
+  font-size: 26px;
+}
+
+.reviewInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reviewDate {
+  font-size: 12px;
+  color: #999;
+}
+
+.reviewTitle {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.reviewContentsWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reviewContentsTitle {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.reviewContentsText {
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #444;
+}
+
+.reviewEmpty {
+  font-size: 12px;
+  color: #888;
+  padding: 20px 0;
 }
 </style>
