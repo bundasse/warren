@@ -3,7 +3,7 @@
  * 리뷰 읽기 전용 컴포넌트.
  * 선택한 날짜에 리뷰가 있으면 보여주고, 없으면 안내 문구를 보여준다.
  */
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import StarRating from '@/components/StarRating.vue'
 
 const props = defineProps({
@@ -12,11 +12,20 @@ const props = defineProps({
 })
 
 const imageError = ref(false)
+/** 스포일러 영역을 클릭해서 열었는지 여부 */
+const spoilerRevealed = ref(false)
+
+const isSpoilerHidden = computed(() => Boolean(props.review?.isSpoiler) && !spoilerRevealed.value)
+
+function revealSpoiler() {
+  if (isSpoilerHidden.value) spoilerRevealed.value = true
+}
 
 watch(
   () => props.review,
   () => {
     imageError.value = false
+    spoilerRevealed.value = false
   },
 )
 </script>
@@ -43,8 +52,14 @@ watch(
         </div>
       </div>
       <div class="reviewContentsWrapper">
-        <h5 class="reviewContentsTitle">{{ review.head }}</h5>
-        <p class="reviewContentsText">{{ review.contents }}</p>
+        <div class="spoilerArea" :class="{ hidden: isSpoilerHidden }" @click="revealSpoiler">
+          <h5 class="reviewContentsTitle">{{ review.head }}</h5>
+          <p class="reviewContentsText">{{ review.contents }}</p>
+          <p v-if="isSpoilerHidden" class="spoilerHint">
+            <i class="bx bx-hide"></i>
+            스포일러 포함 · 클릭하면 내용이 보입니다
+          </p>
+        </div>
       </div>
     </template>
     <p v-else class="reviewEmpty">이 날짜에는 아직 리뷰가 없습니다.</p>
@@ -107,6 +122,37 @@ watch(
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+/* 스포일러: 체크된 리뷰는 내용을 blur 처리하고, 클릭하면 보여준다. */
+.spoilerArea {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.spoilerArea.hidden {
+  cursor: pointer;
+}
+
+.spoilerArea.hidden .reviewContentsTitle,
+.spoilerArea.hidden .reviewContentsText {
+  filter: blur(6px);
+  user-select: none;
+}
+
+.spoilerHint {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  font-size: 12px;
+  color: #444;
+  background: rgba(255, 255, 255, 0.45);
 }
 
 .reviewContentsTitle {

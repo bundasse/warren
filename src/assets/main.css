@@ -129,10 +129,12 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: end;
+  flex-wrap: wrap;
+  gap: 4px;
   margin: 0 12px;
   border-bottom: 1px solid black;
   padding: 4px;
-  height: 52px;
+  min-height: 52px;
 }
 
 .navContainer {

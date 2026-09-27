@@ -11,6 +11,12 @@ const router = createRouter({
       meta: { title: '방명록' },
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('../views/ProfileView.vue'),
+      meta: { title: 'Profile' },
+    },
+    {
       path: '/pic',
       name: 'pic',
       component: () => import('../views/PicView.vue'),
@@ -23,22 +29,22 @@ const router = createRouter({
       meta: { title: 'Review' },
     },
     {
-      path: '/link',
-      name: 'link',
-      component: () => import('../views/LinkView.vue'),
-      meta: { title: 'Link' },
-    },
-    {
-      path: '/profile',
-      name: 'profile',
-      component: () => import('../views/ProfileView.vue'),
-      meta: { title: 'Profile' },
+      path: '/trpg',
+      name: 'trpg',
+      component: () => import('../views/TrpgView.vue'),
+      meta: { title: 'TRPG' },
     },
     {
       path: '/yarn',
       name: 'yarn',
       component: () => import('../views/YarnView.vue'),
       meta: { title: 'Yarn' },
+    },
+    {
+      path: '/link',
+      name: 'link',
+      component: () => import('../views/LinkView.vue'),
+      meta: { title: 'Link' },
     },
     {
       path: '/:pathMatch(.*)*',

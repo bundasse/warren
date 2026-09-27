@@ -54,6 +54,26 @@ function isToday(day) {
   return dateKeyOf(day) === today
 }
 
+/** 썸네일 로드에 실패한 날짜 키 모음 */
+const brokenThumbs = ref({})
+
+function markThumbBroken(dateKey) {
+  brokenThumbs.value = { ...brokenThumbs.value, [dateKey]: true }
+}
+
+/** 해당 날짜의 리뷰 (달력 셀 표시용) */
+function reviewOf(day) {
+  return reviewByDate.value[dateKeyOf(day)] ?? null
+}
+
+/** 달력 셀에 표시할 썸네일 URL. 이미지가 없거나 깨졌으면 빈 문자열 */
+function thumbOf(day) {
+  const key = dateKeyOf(day)
+  const review = reviewByDate.value[key]
+  if (!review?.imageUrl || brokenThumbs.value[key]) return ''
+  return review.imageUrl
+}
+
 function selectDate(day) {
   if (!day) return
   selectedDate.value = dateKeyOf(day)
@@ -157,12 +177,20 @@ onMounted(loadReviews)
                   :class="{
                     today: isToday(day),
                     selected: dateKeyOf(day) === selectedDate,
-                    hasReview: Boolean(reviewByDate[dateKeyOf(day)]),
+                    hasReview: Boolean(reviewOf(day)),
+                    hasThumb: Boolean(thumbOf(day)),
                   }"
                   @click="selectDate(day)"
                 >
+                  <img
+                    v-if="thumbOf(day)"
+                    class="dayThumb"
+                    :src="thumbOf(day)"
+                    alt=""
+                    @error="markThumbBroken(dateKeyOf(day))"
+                  />
                   <span class="dayNumber">{{ day }}</span>
-                  <i v-if="reviewByDate[dateKeyOf(day)]" class="bx bxs-star dayStar"></i>
+                  <i v-if="reviewOf(day) && !thumbOf(day)" class="bx bxs-star dayStar"></i>
                 </button>
               </td>
             </tr>
@@ -302,6 +330,7 @@ onMounted(loadReviews)
 }
 
 .dayCell {
+  position: relative;
   width: 100%;
   height: 100%;
   border: 0;
@@ -313,6 +342,7 @@ onMounted(loadReviews)
   align-items: center;
   gap: 1px;
   color: inherit;
+  overflow: hidden;
 }
 
 .dayCell:hover {
@@ -328,8 +358,41 @@ onMounted(loadReviews)
   color: gold;
 }
 
+/* 리뷰 이미지가 있는 날: 셀을 이미지로 채운다 (비율 유지 = contain) */
+.dayCell.hasThumb {
+  background: #fffaf0;
+}
+
+.dayThumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.dayCell.selected.hasThumb {
+  background: #fffaf0;
+  outline: 2px solid var(--bg-color);
+  outline-offset: -2px;
+}
+
 .dayNumber {
   font-size: 13px;
+}
+
+/* 이미지 위에서는 날짜를 좌상단 배지로 띄워 가독성을 확보한다. */
+.dayCell.hasThumb .dayNumber {
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  z-index: 1;
+  font-size: 11px;
+  line-height: 1.3;
+  padding: 0 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #333;
 }
 
 .dayStar {

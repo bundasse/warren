@@ -17,7 +17,7 @@ const props = defineProps({
 
 const emit = defineEmits(['saved', 'cancel'])
 
-const form = ref({ title: '', imageUrl: '', rating: 0, head: '', contents: '' })
+const form = ref({ title: '', imageUrl: '', rating: 0, head: '', contents: '', isSpoiler: false })
 const isSaving = ref(false)
 const errorMessage = ref('')
 const imageError = ref(false)
@@ -28,7 +28,7 @@ const isFormValid = computed(
 )
 
 function resetForm() {
-  form.value = { title: '', imageUrl: '', rating: 0, head: '', contents: '' }
+  form.value = { title: '', imageUrl: '', rating: 0, head: '', contents: '', isSpoiler: false }
   imageError.value = false
 }
 
@@ -44,8 +44,9 @@ watch(
           rating: Number(item.rating) || 0,
           head: item.head ?? '',
           contents: item.contents ?? '',
+          isSpoiler: Boolean(item.isSpoiler),
         }
-      : { title: '', imageUrl: '', rating: 0, head: '', contents: '' }
+      : { title: '', imageUrl: '', rating: 0, head: '', contents: '', isSpoiler: false }
   },
   { immediate: true },
 )
@@ -70,6 +71,7 @@ async function saveCommand() {
     rating: Number(form.value.rating) || 0,
     head: form.value.head.trim(),
     contents: form.value.contents.trim(),
+    isSpoiler: form.value.isSpoiler,
   }
 
   try {
@@ -131,7 +133,7 @@ async function saveCommand() {
             <StarRating v-model="form.rating" size="24px" />
           </div>
           <div class="field">
-            <label for="txtReviewHead">한줄평</label>
+            <label for="txtReviewHead">한줄메모</label>
             <input id="txtReviewHead" v-model="form.head" type="text" maxlength="80" />
           </div>
         </div>
@@ -146,6 +148,14 @@ async function saveCommand() {
           maxlength="2000"
         ></textarea>
       </div>
+
+      <label class="spoilerCheck">
+        <input v-model="form.isSpoiler" type="checkbox" />
+        <span>
+          <i class="bx bx-hide"></i>
+          스포일러 포함 (내용 가리기)
+        </span>
+      </label>
 
       <p v-if="errorMessage" class="formError">{{ errorMessage }}</p>
 
@@ -258,6 +268,26 @@ async function saveCommand() {
 .formError {
   font-size: 11px;
   color: crimson;
+}
+
+.spoilerCheck {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.spoilerCheck input {
+  width: 14px;
+  height: 14px;
+  accent-color: var(--bg-color);
+  cursor: pointer;
+}
+
+.spoilerCheck i {
+  margin-right: 2px;
 }
 
 .buttons {
