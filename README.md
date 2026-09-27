@@ -62,8 +62,8 @@ src/
     ReviewComponent.vue        리뷰 읽기
     ReviewWriteComponent.vue   리뷰 작성/수정 폼
   utils/date.js        날짜 유틸 (YYYY-MM-DD 키, 달력 셀 계산)
-  views/               MainView(방명록) / PicView / ReviewView / LinkView
-                       / ProfileView / YarnView / NotFoundView
+  views/               MainView(방명록) / ProfileView / PicView / ReviewView
+                       / TrpgView / YarnView / LinkView / NotFoundView
 ```
 
 ## 데이터 백엔드 전환 (mock → Firestore)
@@ -91,7 +91,7 @@ src/
 | --- | --- |
 | `guestbook` | `name`, `password`, `comment`, `createdAt` |
 | `pic` | `name`, `password`, `imageUrl`, `comment`, `createdAt`, `updatedAt` |
-| `review` | `dateKey`(`YYYY-MM-DD`), `title`, `imageUrl`, `rating`, `head`, `contents`, `createdAt` |
+| `review` | `dateKey`(`YYYY-MM-DD`), `title`, `imageUrl`, `rating`, `head`, `contents`, `isSpoiler`, `createdAt` |
 | `banner` | `imageUrl`, `linkUrl`, `createdAt` |
 
 ### 보안 규칙 예시
@@ -123,4 +123,6 @@ service cloud.firestore {
   localStorage.clear() // 또는 devtools > Application > Local Storage에서 삭제
   ```
 - 관리자/리뷰 삭제 비밀번호는 `LinkView.vue`, `ReviewView.vue`의 `ADMIN_PASSWORD` 상수다.
+- 리뷰 작성 시 `스포일러 포함`을 체크하면(`isSpoiler: true`) 읽기 화면에서 한줄메모·내용이 blur 처리되고,
+  blur 영역을 클릭하면 공개된다. 달력에는 이미지가 있는 리뷰만 썸네일(`object-fit: contain`)로 표시된다.
 

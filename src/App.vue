@@ -10,11 +10,12 @@ import { RouterLink, RouterView } from 'vue-router'
         <nav>
           <ul class="navContainer">
             <li><RouterLink to="/">Guestbook</RouterLink></li>
+            <li><RouterLink to="/profile">Profile</RouterLink></li>
             <li><RouterLink to="/pic">Pic</RouterLink></li>
             <li><RouterLink to="/review">Review</RouterLink></li>
-            <li><RouterLink to="/link">Link</RouterLink></li>
+            <li><RouterLink to="/trpg">TRPG</RouterLink></li>
             <li><RouterLink to="/yarn">Yarn</RouterLink></li>
-            <li><RouterLink to="/profile">Profile</RouterLink></li>
+            <li><RouterLink to="/link">Link</RouterLink></li>
           </ul>
         </nav>
       </header>
