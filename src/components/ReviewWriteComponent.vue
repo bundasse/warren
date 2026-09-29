@@ -152,7 +152,7 @@ async function saveCommand() {
       <label class="spoilerCheck">
         <input v-model="form.isSpoiler" type="checkbox" />
         <span>
-          <i class="bx bx-hide"></i>
+          <i class="bx bx-eye-slash"></i>
           스포일러 포함 (내용 가리기)
         </span>
       </label>

@@ -65,12 +65,12 @@ const tools = [
 
     <section class="section">
       <h4 class="sectionTitle">
-        <i class="bx bx-wrench"></i>
+        <i class="bx bx-cog"></i>
         만든 툴
       </h4>
       <ul class="toolList">
         <li v-for="tool in tools" :key="tool.name" class="toolItem">
-          <i class="bx bx-file-blank toolIcon"></i>
+          <i class="bx bx-file toolIcon"></i>
           <div class="toolText">
             <p class="toolName">{{ tool.name }}</p>
             <p class="toolDesc">{{ tool.description }}</p>

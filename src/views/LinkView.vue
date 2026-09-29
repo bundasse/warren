@@ -136,7 +136,7 @@ onMounted(loadBanners)
             추가
           </button>
           <button type="button" class="btnGhost" @click="exitAdmin">
-            <i class="bx bx-log-out"></i>
+            <i class="bx bx-x-circle"></i>
             종료
           </button>
         </template>
@@ -181,7 +181,7 @@ onMounted(loadBanners)
               title="이미지 URL 복사"
               @click="copyText(banner.imageUrl, '이미지 URL')"
             >
-              <i class="bx bx-clip"></i>
+              <i class="bx bx-clipboard"></i>
             </button>
             <button
               type="button"

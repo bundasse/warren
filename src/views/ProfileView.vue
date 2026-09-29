@@ -12,7 +12,7 @@ const activities = [
     description: '시나리오를 쓰고 굴리는 것을 좋아합니다. 주로 판타지/미스터리 계열을 즐깁니다.',
   },
   {
-    icon: 'bx-purchase-tag-alt',
+    icon: 'bx-price-tag-alt',
     title: 'Knit',
     description:
       '실과 바늘로 천천히 무언가를 만드는 시간을 좋아합니다. 완성품은 뜨개 페이지에 정리합니다.',
@@ -24,9 +24,15 @@ const activities = [
   },
 ]
 
+// 기본 클래스: 기본 아이콘은 'bx', 브랜드 아이콘은 'bxl' (폰트가 다름)
 const links = [
-  { icon: 'bx-brand-x', label: 'X (트위터)', url: 'https://x.com/couque_dasse' },
-  { icon: 'bx-planet', label: '연합우주(버터스콘)', url: 'https://buttersc.one/@couque_dasse' },
+  { base: 'bxl', icon: 'bx-twitter-x', label: 'X (트위터)', url: 'https://x.com/couque_dasse' },
+  {
+    base: 'bx',
+    icon: 'bx-planet',
+    label: '연합우주(버터스콘)',
+    url: 'https://buttersc.one/@couque_dasse',
+  },
 ]
 </script>
 
@@ -36,11 +42,11 @@ const links = [
       <img class="profilePic" :src="profileImage" alt="다스 프로필 이미지" />
       <div class="profileIntro">
         <h3 class="profileName">다스 Dasse</h3>
-        <p class="profileTagline">그림 · 리뷰 · 뜨개를 모아두는 개인 홈페이지</p>
+        <p class="profileTagline">그림 · 리뷰 · TRPG · 뜨개를 모아두는 개인 홈페이지</p>
         <ul class="profileLinks">
           <li v-for="link in links" :key="link.url">
             <a :href="link.url" target="_blank" rel="noopener">
-              <i class="bx" :class="link.icon"></i>
+              <i :class="[link.base, link.icon]"></i>
               {{ link.label }}
             </a>
           </li>

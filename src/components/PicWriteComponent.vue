@@ -81,7 +81,7 @@ async function saveCommand() {
 <template>
   <div class="writeWrapper">
     <h3 class="writeTitle">
-      <i class="bx bx-image-add"></i>
+      <i class="bx bx-image-plus"></i>
       {{ isEditing ? '낙서 수정' : '새 낙서' }}
     </h3>
 
