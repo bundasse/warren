@@ -24,7 +24,7 @@ const tools = ['4.0mm 대바늘', '3.5mm 코바늘', '돗바늘', '줄자', '실
   <div class="yarnView">
     <div class="viewHeader">
       <h3 class="viewTitle">
-        <i class="bx bx-purchase-tag-alt"></i>
+        <i class="bx bx-price-tag-alt"></i>
         Knit · 뜨개
       </h3>
       <a class="outLink" href="https://buttersc.one/@couque_dasse" target="_blank" rel="noopener">

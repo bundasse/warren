@@ -103,7 +103,7 @@ onMounted(loadComments)
 
     <section class="guestbook">
       <h3 class="guestbookTitle">
-        <i class="bx bx-message-square-dots"></i>
+        <i class="bx bx-message-bubble-dots"></i>
         방명록
         <span class="count">{{ comments.length }}</span>
       </h3>

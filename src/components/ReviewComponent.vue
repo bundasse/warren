@@ -56,7 +56,7 @@ watch(
           <h5 class="reviewContentsTitle">{{ review.head }}</h5>
           <p class="reviewContentsText">{{ review.contents }}</p>
           <p v-if="isSpoilerHidden" class="spoilerHint">
-            <i class="bx bx-hide"></i>
+            <i class="bx bx-eye-slash"></i>
             스포일러 포함 · 클릭하면 내용이 보입니다
           </p>
         </div>

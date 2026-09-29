@@ -45,7 +45,7 @@ function submit() {
   <div v-if="open" class="modalOverlay" @click.self="close">
     <div class="modalBox" role="dialog" aria-modal="true">
       <h4 class="modalTitle">
-        <i class="bx bx-lock-alt"></i>
+        <i class="bx bx-lock"></i>
         {{ title }}
       </h4>
       <p class="modalMessage">{{ message }}</p>
