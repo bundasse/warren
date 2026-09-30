@@ -1,7 +1,6 @@
 import { initializeApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
-import { firebaseConfig, isFirebaseConfigured } from '@/config/firebaseEnv'
+import { firebaseConfig } from '@/config/firebaseEnv'
 
 /**
  * Firebase 초기화.
@@ -11,11 +10,9 @@ import { firebaseConfig, isFirebaseConfigured } from '@/config/firebaseEnv'
  *
  * 이 파일은 `@/api`가 실제 Firestore를 쓸 때만 동적 import되므로,
  * mock 개발 모드에서는 번들에 포함되지 않는다.
+ * Firebase Auth는 사용하지 않으므로 초기화하지 않는다.
  */
-export { firebaseConfig, isFirebaseConfigured }
-
 const app = initializeApp(firebaseConfig)
 
 export const db = getFirestore(app)
-export const auth = getAuth(app)
 export default app

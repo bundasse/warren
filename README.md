@@ -55,6 +55,9 @@ src/
     index.js           단일 진입점. guestbookApi / picApi / reviewApi / bannerApi 노출
     mock.js            개발용 localStorage 백엔드
     firestore.js       실제 Firestore 백엔드
+  config/
+    admin.js           관리자 비밀번호 확인 (VITE_ADMIN_PASSWORD)
+    firebaseEnv.js     Firebase 환경변수 (SDK 미포함)
   components/
     PasswordModal.vue  비밀번호 확인 모달 (삭제/관리자 모드)
     StarRating.vue     별점 입력/표시 공용 컴포넌트
@@ -84,6 +87,18 @@ src/
 3. 개발 서버를 재시작한다.
 
 `VITE_USE_MOCK`을 비워두면 Firebase 키가 채워졌는지 여부로 자동 판단한다.
+
+## 관리자 비밀번호
+
+`.env`의 `VITE_ADMIN_PASSWORD`로 관리한다. (`.env.example` 참고)
+
+```sh
+VITE_ADMIN_PASSWORD='원하는 비밀번호'
+```
+
+값이 비어 있으면 콘솔에 경고가 출력되고 관리자 기능(관리자 모드, 배너·리뷰 삭제)을 쓸 수 없다.
+
+> ⚠️ 이 값은 클라이언트 번들에 포함되므로 접근 차단 수단이 아니다. 실수 방지용으로만 사용하고, 공개 운영 시에는 서버 검증(Cloud Functions 등)을 사용하자.
 
 ## Firestore 컬렉션
 
@@ -122,7 +137,7 @@ service cloud.firestore {
   ```js
   localStorage.clear() // 또는 devtools > Application > Local Storage에서 삭제
   ```
-- 관리자/리뷰 삭제 비밀번호는 `LinkView.vue`, `ReviewView.vue`의 `ADMIN_PASSWORD` 상수다.
+- 관리자/리뷰 삭제 비밀번호는 `.env`의 `VITE_ADMIN_PASSWORD`에서 온다 (`src/config/admin.js`).
 - 리뷰 작성 시 `스포일러 포함`을 체크하면(`isSpoiler: true`) 읽기 화면에서 한줄메모·내용이 blur 처리되고,
   blur 영역을 클릭하면 공개된다. 달력에는 이미지가 있는 리뷰만 썸네일(`object-fit: contain`)로 표시된다.
 

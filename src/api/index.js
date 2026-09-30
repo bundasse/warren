@@ -13,7 +13,7 @@
 import * as mockBackend from './mock'
 import { isFirebaseConfigured, useMockEnvFlag } from '@/config/firebaseEnv'
 
-export const COLLECTIONS = {
+const COLLECTIONS = {
   GUESTBOOK: 'guestbook',
   PIC: 'pic',
   REVIEW: 'review',
@@ -26,8 +26,8 @@ function resolveUseMock() {
   return !isFirebaseConfigured()
 }
 
-/** 현재 mock 백엔드를 쓰고 있는지 여부 */
-export const USE_MOCK = resolveUseMock()
+/** 현재 mock 백엔드를 쓰고 있는지 여부 (내부 전용) */
+const USE_MOCK = resolveUseMock()
 
 let backendPromise = null
 
@@ -61,8 +61,3 @@ export const guestbookApi = createCollectionApi(COLLECTIONS.GUESTBOOK)
 export const picApi = createCollectionApi(COLLECTIONS.PIC)
 export const reviewApi = createCollectionApi(COLLECTIONS.REVIEW)
 export const bannerApi = createCollectionApi(COLLECTIONS.BANNER)
-
-/** 개발용: mock 데이터를 비운다. (mock 모드에서만 동작) */
-export async function clearMockData(collectionName) {
-  if (USE_MOCK) (await getBackend()).clear(collectionName)
-}

@@ -2,9 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { bannerApi } from '@/api'
 import PasswordModal from '@/components/PasswordModal.vue'
-
-/** 관리자 모드 진입 비밀번호 (사이트 주인용) */
-const ADMIN_PASSWORD = 'dasse'
+import { verifyAdminPassword } from '@/config/admin'
 
 const banners = ref([])
 const isLoading = ref(false)
@@ -42,7 +40,7 @@ function openAdminModal() {
 }
 
 function confirmAdmin(password) {
-  if (password !== ADMIN_PASSWORD) {
+  if (!verifyAdminPassword(password)) {
     adminModalError.value = '비밀번호가 일치하지 않습니다.'
     return
   }
@@ -76,14 +74,35 @@ async function addBanner() {
   }
 }
 
-async function removeBanner(banner) {
-  if (!window.confirm('이 배너를 삭제할까요?')) return
+/* 삭제: 사이트 주인 비밀번호를 확인한 뒤 삭제한다. (다른 페이지와 동일한 모달 패턴) */
+const deleteModalOpen = ref(false)
+const deleteModalError = ref('')
+const targetBanner = ref(null)
+
+function openDeleteModal(banner) {
+  targetBanner.value = banner
+  deleteModalError.value = ''
+  deleteModalOpen.value = true
+}
+
+async function confirmDelete(password) {
+  const banner = targetBanner.value
+  if (!banner) return
+
+  if (!verifyAdminPassword(password)) {
+    deleteModalError.value = '비밀번호가 일치하지 않습니다.'
+    return
+  }
+
+  deleteModalOpen.value = false
   try {
     await bannerApi.remove(banner.id)
     await loadBanners()
   } catch (error) {
     console.error('[link] 삭제 실패', error)
     errorMessage.value = '배너 삭제에 실패했습니다.'
+  } finally {
+    targetBanner.value = null
   }
 }
 
@@ -195,7 +214,7 @@ onMounted(loadBanners)
               type="button"
               class="deleteButton"
               title="삭제"
-              @click="removeBanner(banner)"
+              @click="openDeleteModal(banner)"
             >
               <i class="bx bx-trash"></i>
             </button>
@@ -211,6 +230,15 @@ onMounted(loadBanners)
       confirm-text="확인"
       :error="adminModalError"
       @confirm="confirmAdmin"
+    />
+
+    <PasswordModal
+      v-model:open="deleteModalOpen"
+      title="배너 삭제"
+      message="이 배너를 삭제하려면 비밀번호를 입력하세요."
+      confirm-text="삭제"
+      :error="deleteModalError"
+      @confirm="confirmDelete"
     />
   </div>
 </template>

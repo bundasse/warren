@@ -13,6 +13,7 @@ import {
 import ReviewComponent from '@/components/ReviewComponent.vue'
 import ReviewWriteComponent from '@/components/ReviewWriteComponent.vue'
 import PasswordModal from '@/components/PasswordModal.vue'
+import { verifyAdminPassword } from '@/config/admin'
 
 const today = todayKey()
 const [todayYear, todayMonth] = today.split('-').map(Number)
@@ -106,10 +107,9 @@ async function onSaved() {
   await loadReviews()
 }
 
-/* 삭제: 비밀번호 대신 확인 모달 없이 바로 삭제하되, 실수 방지를 위해 확인창을 띄운다. */
+/* 삭제: 사이트 주인 비밀번호를 확인한 뒤 삭제한다. */
 const modalOpen = ref(false)
 const modalError = ref('')
-const ADMIN_PASSWORD = 'dasse'
 
 function openDeleteModal() {
   modalError.value = ''
@@ -119,7 +119,7 @@ function openDeleteModal() {
 async function confirmDelete(password) {
   const review = selectedReview.value
   if (!review) return
-  if (password !== ADMIN_PASSWORD) {
+  if (!verifyAdminPassword(password)) {
     modalError.value = '비밀번호가 일치하지 않습니다.'
     return
   }

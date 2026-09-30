@@ -28,8 +28,8 @@ export function pad2(value) {
   return String(value).padStart(2, '0')
 }
 
-/** Date 객체를 `YYYY-MM-DD` 문자열로 만든다. */
-export function toDateKey(date) {
+/** Date 객체를 `YYYY-MM-DD` 문자열로 만든다. (내부용) */
+function toDateKey(date) {
   return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`
 }
 
@@ -38,22 +38,8 @@ export function todayKey() {
   return toDateKey(new Date())
 }
 
-/**
- * 연/월(1-based)을 받아 `YYYY-MM` 키를 만든다.
- * month는 사람이 읽는 값(1~12)이다.
- */
-export function toMonthKey(year, month) {
-  return `${year}-${pad2(month)}`
-}
-
-/** `YYYY-MM-DD` 문자열을 Date로 변환한다. (로컬 시간대) */
-export function parseDateKey(dateKey) {
-  const [year, month, day] = String(dateKey).split('-').map(Number)
-  return new Date(year, month - 1, day)
-}
-
-/** 해당 연/월(1-based)의 마지막 날(28~31, 윤년 반영)을 반환한다. */
-export function daysInMonth(year, month) {
+/** 해당 연/월(1-based)의 마지막 날(28~31, 윤년 반영)을 반환한다. (내부용) */
+function daysInMonth(year, month) {
   return new Date(year, month, 0).getDate()
 }
 

@@ -77,14 +77,3 @@ export async function remove(collectionName, id) {
     rows.filter((row) => row.id !== id),
   )
 }
-
-/** 개발 중 데이터를 비울 때 사용한다. (콘솔에서 호출) */
-export function clear(collectionName) {
-  if (collectionName) {
-    window.localStorage.removeItem(storageKey(collectionName))
-    return
-  }
-  Object.keys(window.localStorage)
-    .filter((key) => key.startsWith(STORAGE_PREFIX))
-    .forEach((key) => window.localStorage.removeItem(key))
-}
