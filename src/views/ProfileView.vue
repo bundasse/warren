@@ -9,7 +9,7 @@ const activities = [
   {
     icon: 'bx-dice-5',
     title: 'TRPG',
-    description: '시나리오를 쓰고 굴리는 것을 좋아합니다. 주로 판타지/미스터리 계열을 즐깁니다.',
+    description: '시나리오를 쓰고 굴리는 것을 좋아합니다. 주로 판타지/미스터리 계열을 즐깁니다. ',
   },
   {
     icon: 'bx-price-tag-alt',
